@@ -97,19 +97,7 @@ export const useAuthStore = create((set) => ({
             set({ isSigningIn: false });
         }
     },
-    forgotPasssword: async (email) => {
-        set({ isSigningIn: true });
-        try {
-            const res = await axiosInstance.post("/auth/forgot-password", { email });
-            toast.success(res.data.message || "Password reset link sent to your email");
-            return true;
-        } catch (error) {
-            toast.error(error.response?.data?.error || "Failed to send password reset link");
-            return false;
-        } finally {
-            set({ isSigningIn: false });
-        }
-    },
+
     signInWithGoogle: async (googleData) => {
         try {
             const response = await axiosInstance.post('/auth/google', googleData);
@@ -132,11 +120,6 @@ export const useAuthStore = create((set) => ({
         set({ isLoggingOut: true })
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("auth-storage");
-        localStorage.removeItem("chat-store");
-        localStorage.removeItem("i18nextLng");
-        localStorage.removeItem("theme");
         set({ user: null, isAuthenticated: false, isLoggingOut: false });
         return Promise.resolve();
     },
