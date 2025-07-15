@@ -5,19 +5,25 @@ import Notes from './Pages/Notes/Notes.jsx';
 import ProjectMockep from './Pages/projectMockep/ProjectMockep.jsx';
 import AuthFlow from './Pages/SignUPLogic/AuthFlow.jsx';
 import TaskDashboared from './Pages/TaskDashbored/TaskDashboard.jsx';
-import { useAuth } from './context/AuthContext'; // Make sure you have this context
+import { useAuthStore } from './Store/useAuthStore.js'; // Make sure you have this context
+import { useEffect } from 'react';
 
 function ProtectedRoute({ children }) {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   return user ? children : <Navigate to="/auth" replace />;
 }
 
 function PublicRoute({ children }) {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
   return !user ? children : <Navigate to="/" replace />;
 }
 
 function App() {
+  const { user, initialize, isAuthenticated } = useAuthStore();
+  useEffect(() => {
+    initialize();
+  }, []);
+  console.log(isAuthenticated)
   return (
     <Routes>
       <Route

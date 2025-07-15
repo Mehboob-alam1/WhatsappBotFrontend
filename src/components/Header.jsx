@@ -1,13 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
+import { useAuthStore } from '../Store/useAuthStore';
 
 const Header = ({ onLogout }) => {
+  const { logout, user } = useAuthStore();
+  console.log(user.name)
   const navigate = useNavigate();
-
   const handleLogout = () => {
-    onLogout();
-    navigate('/auth');
+    logout();
   };
+
 
   return (
     <header className="header">
@@ -71,13 +73,14 @@ const Header = ({ onLogout }) => {
               <circle cx="12" cy="7" r="4" />
             </svg>
           </button>
+
           <div className="user-profile">
             <img
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/83e6d9d743074ea7a206b25a15a71a78928156a9?width=64"
               alt="John Smith"
               className="user-avatar"
             />
-            <span className="user-name">John Smith</span>
+            <span className="user-name">{user.name}</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="dropdown-icon"
@@ -92,6 +95,12 @@ const Header = ({ onLogout }) => {
             >
               <polyline points="6 9 12 15 18 9" />
             </svg>
+          </div>
+          <div>
+            <button onClick={handleLogout} className='logout-btn'>
+              <span>Logout</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="lucide lucide-log-out-icon lucide-log-out"><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /></svg>
+            </button>
           </div>
         </div>
       </div>

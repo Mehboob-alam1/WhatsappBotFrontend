@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthStore } from '../../Store/useAuthStore';
 import './Login.css';
 import Navbar from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -8,32 +8,33 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const { login } = useAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const { login } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
     try {
-      await login(email, password);
-    } catch (err) {
-      setError(err.message || 'Login failed. Please check credentials.');
-    } finally {
-      setIsLoading(false);
+      const success = await login(formData);
+      if (success) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      // You might want to show a toast notification here
     }
   };
+
 
   return (
     <>
       <div className="app-container">
-        <Navbar />
+        {/* <Navbar /> */}
         <main className="main-content">
           <div className="login-card">
-            {error && <div className="error-message">{error}</div>}
 
             <div className="login-header">
               <div className="login-logo">
@@ -55,11 +56,11 @@ export default function Login() {
                   id="email"
                   placeholder="Enter email"
                   className="form-input"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  disabled={isLoading}
                 />
+
               </div>
 
               <div className="form-group">
@@ -69,19 +70,19 @@ export default function Login() {
                   id="password"
                   placeholder="Enter password"
                   className="form-input"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   required
-                  disabled={isLoading}
                 />
+
               </div>
 
               <button
                 type="submit"
                 className="continue-button"
-                disabled={isLoading}
+
               >
-                {isLoading ? 'Signing in...' : 'Continue'}
+                {'Continue'}
               </button>
             </form>
 
@@ -93,7 +94,6 @@ export default function Login() {
               <button
                 className="social-button google-button"
                 type="button"
-                disabled={isLoading}
               >
                 <svg className="social-icon" viewBox="0 0 24 24">
                   <path
@@ -122,14 +122,13 @@ export default function Login() {
               <button
                 onClick={() => navigate('signup')}
                 className="link-button"
-                disabled={isLoading}
               >
                 Get started
               </button>
             </div>
           </div>
         </main>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </>
   );

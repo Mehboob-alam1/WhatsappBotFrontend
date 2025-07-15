@@ -16,9 +16,9 @@ export default defineConfig({
     proxy: {
       // Proxy all API requests
       '/api': {
-        target: 'http://testbotapp.eu-4.evennode.com',
+        target: 'http://betbot.eu-4.evennode.com',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        // rewrite: (path) => path.replace(/^\/api/, ''),
         secure: false, // Only for development with HTTP
       },
     },

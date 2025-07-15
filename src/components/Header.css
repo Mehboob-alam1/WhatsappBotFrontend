@@ -230,3 +230,14 @@
     display: flex;
   }
 }
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  padding: 6px 12px;
+  gap: 6px;
+  cursor: pointer;
+  border: 1px solid gray;
+  border-radius: 8px;
+}
